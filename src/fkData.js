@@ -13,7 +13,6 @@ const generatePersonsData = (number = 200) => {
       },
       firstName: faker.name.firstName(),
       lastName: faker.name.firstName(),
-      description: faker.lorem.paragraphs(2),
       picture: faker.image.people(),
       country: faker.address.country(),
       birthDate: faker.date.future(),
@@ -29,6 +28,7 @@ const generatePersonsData = (number = 200) => {
 };
 
 const generateCustomer = (persons, number = 100) => {
+  console.log('Updating Customer data');
   persons.filter(function (person) {
     if (this.count < number && (person.isEmployee === undefined || !person.isEmployee)) {
       this.count++;
@@ -39,7 +39,6 @@ const generateCustomer = (persons, number = 100) => {
     const result = a.firstName.localeCompare(b.firstName);
     return result !== 0 ? result : a.lastName.localeCompare(b.lastName);
   }).map((customer) => {
-    console.log('Updating Customer data');
     let address = {
       address: faker.address.streetAddress(),
       address2: faker.address.secondaryAddress(),
@@ -55,6 +54,7 @@ const generateCustomer = (persons, number = 100) => {
 };
 
 const generateEmployee = (persons, number = 25) => {
+  console.log('Updating Employee data');
   persons.filter(function(person) {
       if (this.count < number && (person.isCustomer === undefined || !person.isCustomer)) {
         this.count++;
@@ -66,7 +66,6 @@ const generateEmployee = (persons, number = 25) => {
       const result = a.lastName.localeCompare(b.lastName);
       return result !== 0 ? result : a.firstName.localeCompare(b.firstName);
     }).forEach((employee) => {
-      console.log('Updating Employee data');
       let address = {
         address: faker.address.streetAddress(),
         address2: faker.address.secondaryAddress(),
@@ -96,6 +95,7 @@ const generateProduct = (number = 50) => {
       productName: faker.commerce.productName(),
       productDescription: faker.commerce.productDescription(),
       productMaterial: faker.commerce.productMaterial(),
+      description: faker.lorem.paragraphs(2),
       price: faker.commerce.price(),
       department: faker.commerce.department(),
       productImage: faker.image.fashion(200, 200, true)
@@ -126,9 +126,10 @@ const generateBulkData = () => {
   const brands = generateBrand();
   const products = generateProduct();
   const persons = generatePersonsData();
-  generateEmployee(persons);
-  generateCustomer(persons);
-  bulkData = { ...bulkData, brands, products, persons};
+  const employees = generateEmployee(persons).filter((person)=> person.isEmployee);
+  const customers = generateCustomer(persons).filter((person)=> person.isCustomer);
+  const onlyPersons = persons.filter((person) =>  person.isEmployee === undefined && person.isCustomer === undefined)
+  bulkData = { ...bulkData, brands, products, persons: onlyPersons, employees, customers};
   return bulkData;
 }
 
