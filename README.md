@@ -17,6 +17,6 @@
     - `pageSize`
     - `sortBy`
     - `orderBy` | values `1` or `-1`
-```
-http://localhost:5000/products?&page=3&pageSize=10
-```
+    ```
+    http://localhost:5000/products?&page=3&pageSize=10&sortBy=price&orderBy=-1
+    ```
