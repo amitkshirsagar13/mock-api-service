@@ -96,7 +96,7 @@ const generateProduct = (number = 50) => {
       productDescription: faker.commerce.productDescription(),
       productMaterial: faker.commerce.productMaterial(),
       description: faker.lorem.paragraphs(2),
-      price: faker.commerce.price(),
+      price: parseFloat(faker.commerce.price(10, 5000, 2)) + parseFloat(faker.commerce.price(10, 99, 0) ) * 0.01,
       department: faker.commerce.department(),
       productImage: faker.image.fashion(200, 200, true)
     });
@@ -111,7 +111,7 @@ const generateBrand = (number = 8) => {
   while (number >= 0) {
     brands.push({
       id:number,
-      brand: faker.company.companyName(),
+      brand: faker.company.name(),
       catchPhrase: faker.company.catchPhrase(),
       productImage: faker.image.business(200, 200, true)
     });

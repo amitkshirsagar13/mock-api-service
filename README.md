@@ -10,3 +10,13 @@
 ```
     docker run -d --name mock-api --rm -p 5000:5000 -e PORT=5000 amitkshirsagar13/mock-api-service
 ```
+
+### Invoke api calls
+- Query parameters
+    - `page`
+    - `pageSize`
+    - `sortBy`
+    - `orderBy` | values `1` or `-1`
+```
+http://localhost:5000/products?&page=3&pageSize=10
+```
