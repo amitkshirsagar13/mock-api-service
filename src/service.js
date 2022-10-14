@@ -47,8 +47,8 @@ const compareValues = (key, order = 'asc') => {
 }
 
 const paginate = (params, data) => {
-  const page = params.get('page') || params.get('currentPage') ||1;
-  const pageSize = params.get('pageSize') || 10;
+  const page = parseInt(params.get('page') || params.get('currentPage') || 1);
+  const pageSize = parseInt(params.get('pageSize') || 10);
 
   const sort = params.get('sortBy');
   const order = params.get('orderBy') || 1;
@@ -64,8 +64,8 @@ const paginate = (params, data) => {
     pageResponse.data = dataArray;
     if(dataLength > pageSize) {
       const start = (page - 1 ) * pageSize;
-      const end = page * pageSize - 1;
-      pageResponse.data = dataArray.splice(start, end);
+      const end = page * pageSize;
+      pageResponse.data = dataArray.slice(start, end);
     }
     pageResponse.page = page;
     pageResponse.totalPages = Math.ceil(dataLength / parseInt(pageSize));

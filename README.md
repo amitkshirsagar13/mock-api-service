@@ -20,3 +20,6 @@
     ```
     http://localhost:5000/products?&page=3&pageSize=10&sortBy=price&orderBy=-1
     ```
+
+    http://localhost:4200/api/products?page=0&pageSize=10
+    http://localhost:4200/api/products?page=3&pageSize=10
