@@ -47,7 +47,7 @@ const compareValues = (key, order = 'asc') => {
 }
 
 const paginate = (params, data) => {
-  const page = params.get('page') || 1;
+  const page = params.get('page') || params.get('currentPage') ||1;
   const pageSize = params.get('pageSize') || 10;
 
   const sort = params.get('sortBy');
@@ -70,7 +70,7 @@ const paginate = (params, data) => {
     pageResponse.page = page;
     pageResponse.totalPages = Math.ceil(dataLength / parseInt(pageSize));
     pageResponse.pageSize = pageSize;
-    pageResponse.totalRecords = dataLength;
+    pageResponse.totalRows = dataLength;
   }
   return JSON.stringify(pageResponse);
 }
