@@ -1,6 +1,8 @@
 import { faker } from '@faker-js/faker';
 import  fs  from "fs";
 
+const lowerDate = faker.date.past(15);
+
 const generatePersonsData = (number = 200) => {
   const persons = [];
   while (number >= 0) {
@@ -20,7 +22,8 @@ const generatePersonsData = (number = 200) => {
       geo: {
         type: 'Point',
         coordinates: [ faker.address.latitude(), faker.address.longitude() ]
-      }
+      },
+      createdAt: faker.date.between(lowerDate, new Date())
     });
     number--;
   }
@@ -98,7 +101,8 @@ const generateProduct = (number = 50) => {
       description: faker.lorem.paragraphs(2),
       price: parseFloat(faker.commerce.price(10, 5000, 2)) + parseFloat(faker.commerce.price(10, 99, 0) ) * 0.01,
       department: faker.commerce.department(),
-      productImage: faker.image.fashion(200, 200, true)
+      productImage: faker.image.fashion(200, 200, true),
+      createdAt: faker.date.between(lowerDate, new Date())
     });
     number--;
   }
@@ -132,7 +136,6 @@ const generateBulkData = () => {
   bulkData = { ...bulkData, brands, products, persons: onlyPersons, employees, customers};
   return bulkData;
 }
-
 
 fs.writeFileSync(
   "./db/db.json",
