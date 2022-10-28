@@ -1,6 +1,26 @@
 import jsonServer from 'json-server';
+import path from 'path';
+import multer  from 'multer';
+
+const __dirname = path.resolve();
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, `db/${file.fieldname}`));
+  },
+  filename: function (req, file, cb) {
+    const fileName =  Date.now() + file.originalname.substring(file.originalname.lastIndexOf('.'));
+    req['filePath'] = `${file.fieldname}/${fileName}`;
+    cb(null, fileName);
+  }
+});
+
+const upload = multer({ storage })
+
 const server = jsonServer.create();
+
 const router = jsonServer.router('./db/db.json');
+
 const middlewares = jsonServer.defaults({
   logger: true, 
   noCors: true
@@ -14,11 +34,19 @@ server.use(jsonServer.rewriter({
 
 const paginateResponseBody = (req, res, next) => {
   var oldSend = res.send;
-  res.send = async function(data) {
-    const params = new URLSearchParams(req.originalUrl.split('?').pop());
-    const pageData = req.originalUrl === '/db' ? arguments[0] : await paginate(params, arguments[0]);
-    arguments[0] = pageData;
-    oldSend.apply(res, arguments);
+  if(req.files?.length > 0) {
+    const filePath = req.filePath;
+    res.send = function() {
+      arguments[0] = JSON.stringify({filePath});
+      oldSend.apply(res, arguments);
+    }
+  } else {
+    res.send = async function(data) {
+      const params = new URLSearchParams(req.originalUrl.split('?').pop());
+      const pageData = req.originalUrl === '/db' ? arguments[0] : await paginate(params, arguments[0]);
+      arguments[0] = pageData;
+      oldSend.apply(res, arguments);
+    }
   }
   next();
 }
@@ -54,8 +82,7 @@ const paginate = (params, data) => {
   const order = params.get('orderBy') || 1;
   const dataArray = JSON.parse(data);
   
-  const pageResponse = {
-  }
+  const pageResponse = {};
   if(Array.isArray(dataArray)) {
     if(sort) {
       dataArray.sort(compareValues(sort, order > 0 ? 'asc':'desc'));
@@ -75,8 +102,13 @@ const paginate = (params, data) => {
   return JSON.stringify(pageResponse);
 }
 
-server.use(paginateResponseBody);
+server.use('/download/:store/:id', function(req, res){
+  const file = `${__dirname}/db/${req.params.store}/${req.params.id}`;
+  res.download(file); // Set disposition and send it.
+});
 
 server.use(middlewares);
+server.use(upload.any());
+server.use(paginateResponseBody);
 server.use(router);
 server.listen(port);
