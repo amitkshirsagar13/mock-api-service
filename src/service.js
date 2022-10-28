@@ -81,10 +81,11 @@ const paginate = (params, data) => {
 
   const sort = params.get('sortBy');
   const order = params.get('orderBy') || 1;
-  const dataArray = JSON.parse(data);
+  let dataArray = JSON.parse(data);
   
   const pageResponse = {};
   if(Array.isArray(dataArray)) {
+    dataArray = dataArray.filter(row=> Object.keys(row).length > 1 && Object.keys(row).includes('id'))
     if(sort) {
       dataArray.sort(compareValues(sort, order > 0 ? 'asc':'desc'));
     }
