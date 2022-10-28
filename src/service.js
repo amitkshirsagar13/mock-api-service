@@ -2,6 +2,8 @@ import jsonServer from 'json-server';
 import path from 'path';
 import multer  from 'multer';
 
+const port = process.env.PORT || 5000;
+
 const __dirname = path.resolve();
 
 const storage = multer.diskStorage({
@@ -10,7 +12,7 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     const fileName =  Date.now() + file.originalname.substring(file.originalname.lastIndexOf('.'));
-    req['filePath'] = `${file.fieldname}/${fileName}`;
+    req['filePath'] = `/api/download/${file.fieldname}/${fileName}`;
     cb(null, fileName);
   }
 });
@@ -25,7 +27,6 @@ const middlewares = jsonServer.defaults({
   logger: true, 
   noCors: true
 });
-const port = process.env.PORT || 5000;
 
 
 server.use(jsonServer.rewriter({
