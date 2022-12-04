@@ -23,3 +23,7 @@
 
     http://localhost:4200/api/products?page=0&pageSize=10
     http://localhost:4200/api/products?page=3&pageSize=10
+
+### Postal Api
+
+[http://localhost:5000/api/postal/411033](http://localhost:5000/api/postal/411033)
