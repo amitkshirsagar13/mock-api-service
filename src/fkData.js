@@ -109,7 +109,6 @@ const generateProduct = (number = 50) => {
   return products;
 };
 
-
 const generateBrand = (number = 8) => {
   const brands = [];
   while (number >= 0) {
@@ -124,7 +123,6 @@ const generateBrand = (number = 8) => {
   return brands;
 };
 
-
 const generateBulkData = () => {
   let bulkData = {};
   const brands = generateBrand();
@@ -135,7 +133,7 @@ const generateBulkData = () => {
   const onlyPersons = persons.filter((person) =>  person.isEmployee === undefined && person.isCustomer === undefined)
   bulkData = { ...bulkData, brands, products, persons: onlyPersons, employees, customers};
   return bulkData;
-}
+};
 
 fs.writeFileSync(
   "./db/db.json",

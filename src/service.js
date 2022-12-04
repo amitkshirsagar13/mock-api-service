@@ -1,6 +1,8 @@
 import jsonServer from 'json-server';
 import path from 'path';
 import multer  from 'multer';
+import postalData from '../postal/postal-data-store.json'  assert {type: 'json'};
+import postalIdData from '../postal/postal-data-id-store.json'  assert {type: 'json'};
 
 const port = process.env.PORT || 5000;
 
@@ -29,12 +31,45 @@ const middlewares = jsonServer.defaults({
 });
 
 
+export const fetchPincode = async (req, res) => {
+  const pincode = req.params.pincode;
+  fetchPostalData(pincode).then((response) => {
+    res.json(response)
+  });
+}
+
+const fetchPostalData = async (id) => {
+  const pincodeResponse = {
+      postOfficeList:[],
+      result: 0
+  };
+  await Promise.all(postalData.filter(postalOffice => postalOffice.pincode === Number(id)).map(postalOffice => {
+    const postOfficeData = {};
+    postOfficeData.postOfficeName = postalOffice.officeName;
+    postOfficeData.postOfficeId = findId('postOffice', postalOffice.officeName).id;
+    postOfficeData.taluka = findId('taluka', postalOffice.taluk);
+    postOfficeData.taluka.district = findId('district', postalOffice.districtName);
+    postOfficeData.taluka.district.state = findId('state', postalOffice.stateName);
+    pincodeResponse.postOfficeList.push(postOfficeData);
+  }));
+  pincodeResponse.result = pincodeResponse.postOfficeList.length;
+  pincodeResponse.status = 'success';
+  return pincodeResponse;
+}
+
+const findId = (typeName, name) => {
+  return postalIdData[typeName].find((item => item[typeName] === name));
+}
+
+server.use('/api/postal/:pincode', fetchPincode);
+
+
 server.use(jsonServer.rewriter({
   "/api/*": "/$1",
 }));
 
 const paginateResponseBody = (req, res, next) => {
-  var oldSend = res.send;
+  const oldSend = res.send;
   if(req.files?.length > 0) {
     const filePath = req.filePath;
     res.send = function() {
@@ -51,6 +86,7 @@ const paginateResponseBody = (req, res, next) => {
   }
   next();
 }
+
 const compareValues = (key, order = 'asc') => {
   return function innerSort(a, b) {
     if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
@@ -108,6 +144,8 @@ server.use('/download/:store/:id', function(req, res){
   const file = `${__dirname}/db/${req.params.store}/${req.params.id}`;
   res.download(file); // Set disposition and send it.
 });
+
+
 
 server.use(middlewares);
 server.use(upload.any());

@@ -1,0 +1,142 @@
+[
+    {
+        "state": "ANDHRA PRADESH",
+        "id": 1
+    },
+    {
+        "state": "PONDICHERRY",
+        "id": 2
+    },
+    {
+        "state": "ASSAM",
+        "id": 3
+    },
+    {
+        "state": "BIHAR",
+        "id": 4
+    },
+    {
+        "state": "CHATTISGARH",
+        "id": 5
+    },
+    {
+        "state": "DELHI",
+        "id": 6
+    },
+    {
+        "state": "GUJARAT",
+        "id": 7
+    },
+    {
+        "state": "DAMAN & DIU",
+        "id": 8
+    },
+    {
+        "state": "DADRA & NAGAR HAVELI",
+        "id": 9
+    },
+    {
+        "state": "HARYANA",
+        "id": 10
+    },
+    {
+        "state": "HIMACHAL PRADESH",
+        "id": 11
+    },
+    {
+        "state": "JAMMU & KASHMIR",
+        "id": 12
+    },
+    {
+        "state": "JHARKHAND",
+        "id": 13
+    },
+    {
+        "state": "KARNATAKA",
+        "id": 14
+    },
+    {
+        "state": "KERALA",
+        "id": 15
+    },
+    {
+        "state": "LAKSHADWEEP",
+        "id": 16
+    },
+    {
+        "state": "MADHYA PRADESH",
+        "id": 17
+    },
+    {
+        "state": "MAHARASHTRA",
+        "id": 18
+    },
+    {
+        "state": "GOA",
+        "id": 19
+    },
+    {
+        "state": "MANIPUR",
+        "id": 20
+    },
+    {
+        "state": "MIZORAM",
+        "id": 21
+    },
+    {
+        "state": "NAGALAND",
+        "id": 22
+    },
+    {
+        "state": "TRIPURA",
+        "id": 23
+    },
+    {
+        "state": "ARUNACHAL PRADESH",
+        "id": 24
+    },
+    {
+        "state": "MEGHALAYA",
+        "id": 25
+    },
+    {
+        "state": "ODISHA",
+        "id": 26
+    },
+    {
+        "state": "PUNJAB",
+        "id": 27
+    },
+    {
+        "state": "CHANDIGARH",
+        "id": 28
+    },
+    {
+        "state": "RAJASTHAN",
+        "id": 29
+    },
+    {
+        "state": "TAMIL NADU",
+        "id": 30
+    },
+    {
+        "state": "UTTAR PRADESH",
+        "id": 31
+    },
+    {
+        "state": "UTTARAKHAND",
+        "id": 32
+    },
+    {
+        "state": "WEST BENGAL",
+        "id": 33
+    },
+    {
+        "state": "ANDAMAN & NICOBAR ISLANDS",
+        "id": 34
+    },
+    {
+        "state": "SIKKIM",
+        "id": 35
+    }
+]
