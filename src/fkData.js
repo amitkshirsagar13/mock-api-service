@@ -123,15 +123,33 @@ const generateBrand = (number = 8) => {
   return brands;
 };
 
+const generatePostal = (number = 1) => {
+  const postal = [];
+  while (number > 0) {
+    postal.push({
+    });
+    number--;
+  }
+  return postal;
+};
+
 const generateBulkData = () => {
   let bulkData = {};
+  // const postal = generatePostal();
   const brands = generateBrand();
   const products = generateProduct();
   const persons = generatePersonsData();
   const employees = generateEmployee(persons).filter((person)=> person.isEmployee);
   const customers = generateCustomer(persons).filter((person)=> person.isCustomer);
   const onlyPersons = persons.filter((person) =>  person.isEmployee === undefined && person.isCustomer === undefined)
-  bulkData = { ...bulkData, brands, products, persons: onlyPersons, employees, customers};
+  bulkData = { 
+    ...bulkData, 
+    // postal, 
+    brands, products, 
+    persons: onlyPersons, 
+    employees, 
+    customers
+  };
   return bulkData;
 };
 
