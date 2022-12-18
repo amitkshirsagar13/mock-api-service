@@ -1,3 +1,3 @@
 #!/bin/sh
-node src/fkData.js
-node src/service.js
+node --experimental-specifier-resolution=node src/fkData.js
+node --experimental-specifier-resolution=node src/service.js

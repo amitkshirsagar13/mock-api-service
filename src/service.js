@@ -1,8 +1,9 @@
 import jsonServer from 'json-server';
 import path from 'path';
 import multer  from 'multer';
-import postalData from '../postal/postal-data-store.json'  assert {type: 'json'};
-import postalIdData from '../postal/postal-data-id-store.json'  assert {type: 'json'};
+import {postalRoute} from './routes/postal-route';
+import fs from 'fs';
+
 
 const port = process.env.PORT || 5000;
 
@@ -10,7 +11,11 @@ const __dirname = path.resolve();
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, `db/${file.fieldname}`));
+    const destination = `db/${file.fieldname}`;
+    cb(null, path.join(__dirname, destination));
+    if (!fs.existsSync(destination)){
+      fs.mkdirSync(destination);
+    }
   },
   filename: function (req, file, cb) {
     const fileName =  Date.now() + file.originalname.substring(file.originalname.lastIndexOf('.'));
@@ -30,38 +35,7 @@ const middlewares = jsonServer.defaults({
   noCors: true
 });
 
-
-export const fetchPincode = async (req, res) => {
-  const pincode = req.params.pincode;
-  fetchPostalData(pincode).then((response) => {
-    res.json(response)
-  });
-}
-
-const fetchPostalData = async (id) => {
-  const pincodeResponse = {
-      postOfficeList:[],
-      result: 0
-  };
-  await Promise.all(postalData.filter(postalOffice => postalOffice.pincode === Number(id)).map(postalOffice => {
-    const postOfficeData = {};
-    postOfficeData.postOfficeName = postalOffice.officeName;
-    postOfficeData.postOfficeId = findId('postOffice', postalOffice.officeName).id;
-    postOfficeData.taluka = findId('taluka', postalOffice.taluk);
-    postOfficeData.taluka.district = findId('district', postalOffice.districtName);
-    postOfficeData.taluka.district.state = findId('state', postalOffice.stateName);
-    pincodeResponse.postOfficeList.push(postOfficeData);
-  }));
-  pincodeResponse.result = pincodeResponse.postOfficeList.length;
-  pincodeResponse.status = 'success';
-  return pincodeResponse;
-}
-
-const findId = (typeName, name) => {
-  return postalIdData[typeName].find((item => item[typeName] === name));
-}
-
-server.use('/api/postal/:pincode', fetchPincode);
+server.use('/api/postal/:pincode', postalRoute.fetchPincode);
 
 
 server.use(jsonServer.rewriter({
