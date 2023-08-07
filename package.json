@@ -4,7 +4,7 @@
   "description": "Mock server for different entities!!!",
   "main": "index.js",
   "scripts": {
-    "start-back": "node fkData && json-server --watch db/db.json --port 8080",
+    "start-back": "node src/fkData && npx json-server --watch db/db.json --port 8080",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node --experimental-specifier-resolution=node src/service.js"
   },
@@ -15,7 +15,8 @@
   "author": "amit.kshirsagar.13@gmail.com",
   "license": "ISC",
   "dependencies": {
-    "json-server": "^0.17.0",
+    "cors": "^2.8.5",
+    "json-server": "^0.17.3",
     "multer": "^1.4.5-lts.1",
     "path": "^0.12.7"
   },

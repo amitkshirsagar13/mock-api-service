@@ -3,6 +3,7 @@ import path from 'path';
 import multer  from 'multer';
 import {postalRoute} from './routes/postal-route';
 import fs from 'fs';
+import cors from'cors';
 
 
 const port = process.env.PORT || 5000;
@@ -34,6 +35,7 @@ const middlewares = jsonServer.defaults({
   logger: true, 
   noCors: true
 });
+server.use(cors())
 
 server.use('/api/postal/:pincode', postalRoute.fetchPincode);
 
@@ -86,12 +88,16 @@ const compareValues = (key, order = 'asc') => {
 }
 
 const paginate = (params, data) => {
-  const page = parseInt(params.get('page') || params.get('currentPage') || 1);
+
+  const page = parseInt(params.get('page') || params.get('currentPage') || 0);
   const pageSize = parseInt(params.get('pageSize') || 10);
 
   const sort = params.get('sortBy');
   const order = params.get('orderBy') || 1;
   let dataArray = JSON.parse(data);
+  let isObject = !Array.isArray(JSON.parse(data));
+  
+  if (isObject) return data;
   
   const pageResponse = {};
   if(Array.isArray(dataArray)) {
@@ -102,8 +108,8 @@ const paginate = (params, data) => {
     const dataLength = dataArray.length;
     pageResponse.data = dataArray;
     if(dataLength > pageSize) {
-      const start = (page - 1 ) * pageSize;
-      const end = page * pageSize;
+      const start = (page) * pageSize;
+      const end = (page + 1) * pageSize;
       pageResponse.data = dataArray.slice(start, end);
     }
     pageResponse.page = page;
